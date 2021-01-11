@@ -1,20 +1,19 @@
-package com.starikcetin.ctis496.project2;
+package com.starikcetin.ctis496.project2.q4b;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
-import java.io.*;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-public class Q4PartB {
+public class AES {
     private static final String IV = "AAAAAAAAAAAAAAAA";
     private static final String encryptionKey = "FooBarBazQuazQux";
     private static final String plaintextRelativePath = "/home/starikcetin/temp/message.txt";
 
     public static void main(String[] args) throws Exception {
-
         System.out.println("--------- Encrypting ---------");
         encryptAndWriteToFiles(plaintextRelativePath, encryptionKey);
 

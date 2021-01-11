@@ -1,4 +1,4 @@
-package com.starikcetin.ctis496.project2;
+package com.starikcetin.ctis496.project2.q5;
 
 import java.text.MessageFormat;
 import java.util.Objects;
@@ -11,15 +11,15 @@ public class Person implements Comparable<Person> {
     private final int age;
 
     public Person(String name, String surname, int age) throws Exception {
-        if(name == null || name.isBlank()) {
+        if (name == null || name.isBlank()) {
             throw new Exception("Name cannot be empty.");
         }
 
-        if(surname == null || surname.isBlank()) {
+        if (surname == null || surname.isBlank()) {
             throw new Exception("Surname cannot be empty.");
         }
 
-        if(age <= 0) {
+        if (age <= 0) {
             throw new Exception("Age must be greater than zero.");
         }
 
@@ -30,13 +30,13 @@ public class Person implements Comparable<Person> {
 
     // MET00-J. Validate method arguments
     public static Person withFullName(String fullName, int age) throws Exception {
-        if(fullName == null || fullName.isBlank()) {
+        if (fullName == null || fullName.isBlank()) {
             throw new Exception("Full name cannot be empty.");
         }
 
         var split = fullName.split(" ");
 
-        if(split.length != 2) {
+        if (split.length != 2) {
             throw new IllegalArgumentException("Make sure full name is in the following format: Name Surname");
         }
 
