@@ -11,7 +11,7 @@ import java.nio.file.Paths;
 public class AES {
     private static final String IV = "AAAAAAAAAAAAAAAA";
     private static final String encryptionKey = "FooBarBazQuazQux";
-    private static final String plaintextRelativePath = "/home/starikcetin/temp/message.txt";
+    private static final String plaintextRelativePath = "D:\\temp\\message.txt";
 
     public static void main(String[] args) throws Exception {
         System.out.println("--------- Encrypting ---------");
@@ -25,6 +25,18 @@ public class AES {
         System.out.println("Reading plaintext from: " + plaintextRelativePath);
         var plaintext = readFileAsString(plaintextRelativePath).trim();
         System.out.println("Plaintext: " + plaintext);
+        System.out.println();
+
+        // CBC
+        var cbcPath = plaintextRelativePath + ".cbc";
+        var cbcCiphertextByteArr = encryptCBC(plaintext, encryptionKey, "CBC");
+
+        System.out.print("CBC ciphertext: ");
+        printByteArray(cbcCiphertextByteArr);
+        System.out.println();
+
+        System.out.println("Writing CBC ciphertext to: " + cbcPath);
+        writeByteArrayToFile(cbcPath, cbcCiphertextByteArr);
         System.out.println();
 
         // ECB
@@ -65,6 +77,14 @@ public class AES {
     }
 
     private static void decryptAndPrintEncryptedFiles(String plaintextRelativePath, String encryptionKey) throws Exception {
+        // CBC
+        var cbcPath = plaintextRelativePath + ".cbc";
+        System.out.println("Reading CBC ciphertext from: " + cbcPath);
+        var cbcCipherText = readFileAsByteArray(cbcPath);
+        var cbcPlainText = decryptCBC(cbcCipherText, encryptionKey, "CBC");
+        System.out.println("CBC decrypted: " + cbcPlainText);
+        System.out.println();
+
         // ECB
         var ecbPath = plaintextRelativePath + ".ecb";
         System.out.println("Reading ECB ciphertext from: " + ecbPath);
@@ -104,6 +124,13 @@ public class AES {
         return cipher.doFinal(plainText.getBytes(StandardCharsets.UTF_8));
     }
 
+    private static byte[] encryptCBC(String plainText, String encryptionKey, String mode) throws Exception {
+        Cipher cipher = Cipher.getInstance("AES/" + mode + "/PKCS5Padding", "SunJCE");
+        SecretKeySpec key = new SecretKeySpec(encryptionKey.getBytes(StandardCharsets.UTF_8), "AES");
+        cipher.init(Cipher.ENCRYPT_MODE, key, new IvParameterSpec(IV.getBytes(StandardCharsets.UTF_8)));
+        return cipher.doFinal(plainText.getBytes(StandardCharsets.UTF_8));
+    }
+
     private static String decrypt(byte[] cipherText, String encryptionKey, String mode) throws Exception {
         Cipher cipher = Cipher.getInstance("AES/" + mode + "/NoPadding", "SunJCE");
         SecretKeySpec key = new SecretKeySpec(encryptionKey.getBytes(StandardCharsets.UTF_8), "AES");
@@ -115,6 +142,13 @@ public class AES {
         Cipher cipher = Cipher.getInstance("AES/" + mode + "/PKCS5Padding", "SunJCE");
         SecretKeySpec key = new SecretKeySpec(encryptionKey.getBytes(StandardCharsets.UTF_8), "AES");
         cipher.init(Cipher.DECRYPT_MODE, key);
+        return new String(cipher.doFinal(cipherText), StandardCharsets.UTF_8);
+    }
+
+    private static String decryptCBC(byte[] cipherText, String encryptionKey, String mode) throws Exception {
+        Cipher cipher = Cipher.getInstance("AES/" + mode + "/PKCS5Padding", "SunJCE");
+        SecretKeySpec key = new SecretKeySpec(encryptionKey.getBytes(StandardCharsets.UTF_8), "AES");
+        cipher.init(Cipher.DECRYPT_MODE, key, new IvParameterSpec(IV.getBytes(StandardCharsets.UTF_8)));
         return new String(cipher.doFinal(cipherText), StandardCharsets.UTF_8);
     }
 
