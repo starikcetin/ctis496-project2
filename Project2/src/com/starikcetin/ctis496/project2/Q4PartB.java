@@ -10,8 +10,8 @@ import java.nio.file.Paths;
 
 public class Q4PartB {
     private static final String IV = "AAAAAAAAAAAAAAAA";
-    private static final String encryptionKey = "foobarbazquazqux";
-    private static final String plaintextRelativePath = "/home/starikcetin/Desktop/network project 2/q4/b/message.txt";
+    private static final String encryptionKey = "FooBarBazQuazQux";
+    private static final String plaintextRelativePath = "/home/starikcetin/temp/message.txt";
 
     public static void main(String[] args) throws Exception {
 
